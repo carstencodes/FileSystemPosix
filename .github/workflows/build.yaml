@@ -1,0 +1,83 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, staging, development ]
+  pull_request:
+    branches: [ main, staging, development ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust-linux:
+    runs-on: ubuntu-16.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --verbose --release
+      working-directory: rs
+    - name: Run tests
+      run: cargo test --verbose --release
+      working-directory: rs
+    - name: Upload shared object
+      uses: actions/upload-artifact@v2
+      with:
+        name: shared-object
+        path: rs/target/release/libposix_permissions.so
+        retention-days: 1
+
+  rust-macos:
+    runs-on: macos-10.15
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --verbose --release
+      working-directory: rs
+    - name: Run tests
+      run: cargo test --verbose --release
+      working-directory: rs
+    - name: Upload shared object
+      uses: actions/upload-artifact@v2
+      with:
+        name: dylib
+        path: rs/target/release/libposix_permissions.dylib
+        retention-days: 1
+
+  dotnet-core:
+    runs-on: ubuntu-16.04
+    needs: [rust-linux, rust-macos]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+    - name: Fetch dylib Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: dylib 
+    - name: Fetch so Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: shared-object 
+    - name: Pack
+      run: dotnet pack --configuration Release
+    - name: Upload NuGetPackage
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: csharp/pack/release/Posix.FileSystem.Permissions.*.nupkg
+    - name: Upload NuGetPackage
+      uses: actions/upload-artifact@v2
+      with:
+        name: snupkg
+        path: csharp/pack/release/Posix.FileSystem.Permissions.*.snupkg
