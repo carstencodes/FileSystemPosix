@@ -17,6 +17,7 @@
         <ItemGroup>
             <Compile Remove="$(GeneratedAssemblyConfigurationFile)" />
         </ItemGroup>
+        <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
         <WriteCodeFragment AssemblyAttributes="@(ConfigurationAttributes)" Language="$(Language)" OutputFile="$(GeneratedAssemblyConfigurationFile)">
             <Output TaskParameter="OutputFile" ItemName="FileWrites" /> 
             <Output TaskParameter="OutputFile" ItemName="Compile" /> 
