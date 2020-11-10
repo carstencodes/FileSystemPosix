@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <NativeFilesDirectory>$(MsBuildThisFileDirectory)..\..\rs\target\$(Configuration.ToLower())</NativeFilesDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+        <!--<Content Include="$(NativeFilesDirectory)\libposix_permissions.dylib">
+          <PackagePath>runtimes/osx/native/libposix_permissions.x64.dylib</PackagePath>
+          <Pack>true</Pack>
+        </Content>-->
+        <Content Include="$(NativeFilesDirectory)\libposix_permissions.so">
+          <PackagePath>runtimes/linux/native/libposix_permissions.x64.so</PackagePath>
+          <Pack>true</Pack>
+        </Content>
+        <Content Include="$(MsBuildThisFileDirectory)\build\Posix.FileSystem.Permissions.targets">
+          <PackagePath>build/net45/</PackagePath>
+          <Pack>true</Pack>
+        </Content>
+    </ItemGroup>
+</Project>
