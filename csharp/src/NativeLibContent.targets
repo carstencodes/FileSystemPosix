@@ -4,10 +4,10 @@
         <NativeFilesDirectory>$(MsBuildThisFileDirectory)..\..\rs\target\$(Configuration.ToLower())</NativeFilesDirectory>
     </PropertyGroup>
     <ItemGroup>
-        <!--<Content Include="$(NativeFilesDirectory)\libposix_permissions.dylib">
+        <Content Include="$(NativeFilesDirectory)\libposix_permissions.dylib">
           <PackagePath>runtimes/osx/native/libposix_permissions.x64.dylib</PackagePath>
           <Pack>true</Pack>
-        </Content>-->
+        </Content>
         <Content Include="$(NativeFilesDirectory)\libposix_permissions.so">
           <PackagePath>runtimes/linux/native/libposix_permissions.x64.so</PackagePath>
           <Pack>true</Pack>
