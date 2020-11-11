@@ -58,6 +58,8 @@ jobs:
   dotnet-core:
     runs-on: ubuntu-16.04
     needs: [rust-linux, rust-macos, determine-version]
+    env:
+      project_version: ${{ needs.determine-version.outputs.version }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -67,9 +69,9 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Print determined-version
-      run: echo ${{ needs.determine-version.outputs.version }}
+      run: echo Building version $project_version
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore -pVersion=${{ needs.determine-version.outputs.version }}
+      run: dotnet build --configuration Release --no-restore -property:Version=$project_version
     - name: Test solution
       run: dotnet test --no-restore --verbosity normal
     - name: Fetch dylib Artifacts
@@ -83,14 +85,15 @@ jobs:
         name: shared-object 
         path: rs/target/release
     - name: Pack NuGet Package
-      run: dotnet pack --configuration Release -pVersion=${{ needs.determine-version.outputs.version }}
+      run: dotnet pack --configuration Release -property:Version=$project_version
     - name: Upload NuGetPackage as artifact
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
-        path: csharp/pack/Release/Posix.FileSystem.Permissions.${{ needs.determine-version.outputs.version }}.nupkg
+        path: csharp/pack/Release/Posix.FileSystem.Permissions.$project_version.nupkg
     - name: Upload Symbol NuGetPackage as artifact
       uses: actions/upload-artifact@v2
       with:
         name: snupkg
-        path: csharp/pack/Release/Posix.FileSystem.Permissions.${{ needs.determine-version.outputs.version }}.snupkg
+        path: csharp/pack/Release/Posix.FileSystem.Permissions.$project_version.snupkg
+      
