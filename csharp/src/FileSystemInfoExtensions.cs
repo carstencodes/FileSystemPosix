@@ -15,19 +15,19 @@ namespace Posix.FileSystem.Permission
     public static class FileSystemInfoExtensions
     {
         /// <summary>
-        /// Gets the <see cref="FileSystemEntries" /> for this instance.
+        /// Gets the <see cref="FileSystemAttributes" /> for this instance.
         /// </summary>
         /// <param name="info">The current instance.</param>
         /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
-        /// <returns>The file system entries found.</returns>
-        public static FileSystemEntries GetEntries(this FileSystemInfo info)
+        /// <returns>The file system attributes found.</returns>
+        public static FileSystemAttributes GetAttributes(this FileSystemInfo info)
         {
             if (null == info)
             {
                 throw new ArgumentNullException(nameof(info));
             }
 
-            return FileSystem.GetEntries(info.FullName);
+            return FileSystem.GetAttributes(info.FullName);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Posix.FileSystem.Permission
         /// <returns>The file system permissions.</returns>
         public static FileSystemPermissions GetPermissions(this FileSystemInfo info)
         {
-            return info.GetEntries().Permissions;
+            return info.GetAttributes().Permissions;
         }
 
         /// <summary>

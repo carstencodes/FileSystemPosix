@@ -9,17 +9,17 @@ namespace Posix.FileSystem.Permission
     using System;
 
     /// <summary>
-    /// Gets the entry information for a specific file system information.
+    /// Gets the attribute information for a specific file system information.
     /// </summary>
-    public struct FileSystemEntries
+    public struct FileSystemAttributes
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="FileSystemEntries" /> struct.
+        /// Creates a new instance of the <see cref="FileSystemAttributes" /> struct.
         /// </summary>
         /// <param name="user">The name of the owning user.</param>
         /// <param name="group">The name of the owning group.</param>
         /// <param name="permissions">The permissions.</param>
-        public FileSystemEntries(
+        public FileSystemAttributes(
             string user, 
             string group, 
             FileSystemPermissions permissions) 

@@ -27,19 +27,19 @@ namespace Posix.FileSystem.Permission
         }
 
         /// <summary>
-        /// Gets the <see cref="FileSystemEntries" /> for the specified <paramref name="fileOrDirectory"/>.
+        /// Gets the <see cref="FileSystemAttributes" /> for the specified <paramref name="fileOrDirectory"/>.
         /// </summary>
         /// <param name="fileOrDirectory">The full path of the file or directory.</param>
         /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
-        /// <returns>The file system entries found.</returns>
-        public static FileSystemEntries GetEntries(string fileOrDirectory)
+        /// <returns>The file system attributes found.</returns>
+        public static FileSystemAttributes GetAttributes(string fileOrDirectory)
         {
             if (string.IsNullOrWhiteSpace(fileOrDirectory))
             {
                 throw new ArgumentNullException(nameof(fileOrDirectory));
             }
 
-            return backend.GetEntries(fileOrDirectory);
+            return backend.GetAttributes(fileOrDirectory);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Posix.FileSystem.Permission
         /// <returns>The file system permissions found.</returns>
         public static FileSystemPermissions GetPermissions(string fileOrDirectory)
         {
-            return GetEntries(fileOrDirectory).Permissions;
+            return GetAttributes(fileOrDirectory).Permissions;
         }
 
         /// <summary>

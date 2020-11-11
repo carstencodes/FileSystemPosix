@@ -14,22 +14,22 @@ namespace Posix.FileSystem.Permission
     internal abstract class Backend
     {
         /// <summary>
-        /// Gets the <see cref="FileSystemEntries" /> that belong to the <paramref name="fileOrDirectory" />.
+        /// Gets the <see cref="FileSystemAttributes" /> that belong to the <paramref name="fileOrDirectory" />.
         /// </summary>
         /// <param name="fileOrDirectory">The path to the file or directory.</param>
-        /// <returns>The file system entries.</returns>
-        internal FileSystemEntries GetEntries(string fileOrDirectory)
+        /// <returns>The file system attributes.</returns>
+        internal FileSystemAttributes GetAttributes(string fileOrDirectory)
         {
             if (!File.Exists(fileOrDirectory) || !Directory.Exists(fileOrDirectory))
             {
-                return new FileSystemEntries();
+                return new FileSystemAttributes();
             }
 
             string user = this.GetOwningUser(fileOrDirectory);
             string group = this.GetOwningGroup(fileOrDirectory);
             FileSystemPermissions permissions = this.GetPermissions(fileOrDirectory);
 
-            return new FileSystemEntries(
+            return new FileSystemAttributes(
                 user, group, permissions);
         }
 
