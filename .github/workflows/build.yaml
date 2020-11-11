@@ -69,7 +69,7 @@ jobs:
     - name: Print determined-version
       run: echo ${{ needs.determine-version.outputs.version }}
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore -p Version=${{ needs.determine-version.outputs.version }}
+      run: dotnet build --configuration Release --no-restore -pVersion=${{ needs.determine-version.outputs.version }}
     - name: Test solution
       run: dotnet test --no-restore --verbosity normal
     - name: Fetch dylib Artifacts
@@ -83,7 +83,7 @@ jobs:
         name: shared-object 
         path: rs/target/release
     - name: Pack NuGet Package
-      run: dotnet pack --configuration Release
+      run: dotnet pack --configuration Release -pVersion=${{ needs.determine-version.outputs.version }}
     - name: Upload NuGetPackage as artifact
       uses: actions/upload-artifact@v2
       with:
