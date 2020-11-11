@@ -90,10 +90,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
-        path: csharp/pack/Release/Posix.FileSystem.Permissions.$project_version.nupkg
+        path: csharp/pack/Release/Posix.FileSystem.Permissions.*.nupkg
     - name: Upload Symbol NuGetPackage as artifact
       uses: actions/upload-artifact@v2
       with:
         name: snupkg
-        path: csharp/pack/Release/Posix.FileSystem.Permissions.$project_version.snupkg
+        path: csharp/pack/Release/Posix.FileSystem.Permissions.*.snupkg
       
