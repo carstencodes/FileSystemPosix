@@ -10,6 +10,14 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  determine-version:
+    runs-on: ubuntu-16.04
+    outputs:
+      version: ${{ steps.getcargoversion.outputs.version }}
+    steps:
+      - id: getcargoversion
+        run: echo "::set-output name=version::"$(grep -i Version rs/Cargo.toml | cut -d= -f2 | tr -d '[ "]').$GITHUB_RUN_NUMBER
+
   rust-linux:
     runs-on: ubuntu-16.04
 
@@ -48,7 +56,7 @@ jobs:
 
   dotnet-core:
     runs-on: ubuntu-16.04
-    needs: [rust-linux, rust-macos]
+    needs: [rust-linux, rust-macos, determine-version]
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -57,8 +65,10 @@ jobs:
         dotnet-version: 3.1.404
     - name: Install dependencies
       run: dotnet restore
+    - name: Print determined-version
+      run: echo ${{ needs.determine-version.outputs.version }}
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore -p Version=${{ needs.determine-version.outputs.version }}
     - name: Test solution
       run: dotnet test --no-restore --verbosity normal
     - name: Fetch dylib Artifacts
@@ -77,9 +87,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
-        path: csharp/pack/Release/Posix.FileSystem.Permissions.*.nupkg
+        path: csharp/pack/Release/Posix.FileSystem.Permissions.${{ needs.determine-version.outputs.version }}.nupkg
     - name: Upload Symbol NuGetPackage as artifact
       uses: actions/upload-artifact@v2
       with:
         name: snupkg
-        path: csharp/pack/Release/Posix.FileSystem.Permissions.*.snupkg
+        path: csharp/pack/Release/Posix.FileSystem.Permissions.${{ needs.determine-version.outputs.version }}.snupkg
