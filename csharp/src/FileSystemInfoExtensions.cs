@@ -1,5 +1,5 @@
 /*
- * (C) 2020 by Carsten Igel
+ * FileSystemInfoExtensions.cs - (C) 2020 by Carsten Igel
  * 
  * Published using the MIT License
  */

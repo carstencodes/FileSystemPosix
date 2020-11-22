@@ -1,5 +1,5 @@
 /*
- * (C) 2020 by Carsten Igel
+ * FileSystemAttributes.cs - (C) 2020 by Carsten Igel
  * 
  * Published using the MIT License
  */
