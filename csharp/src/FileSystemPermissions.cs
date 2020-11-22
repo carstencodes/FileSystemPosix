@@ -26,6 +26,12 @@ namespace Posix.FileSystem.Permission
         /// </summary>
         private readonly FileSystemPermission? otherPermission;
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="FileSystemPermissions" /> struct.
+        /// </summary>
+        /// <param name="userPermission">The <see cref="FileSystemPermission" /> for the owning user.</param>
+        /// <param name="groupPermission">The <see cref="FileSystemPermission" /> for the owning group.</param>
+        /// <param name="otherPermission">The <see cref="FileSystemPermission" /> for any other user.</param>
         public FileSystemPermissions(
             FileSystemPermission userPermission,
             FileSystemPermission groupPermission,
