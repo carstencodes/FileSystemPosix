@@ -27,6 +27,39 @@ namespace Posix.FileSystem.Permission
         }
 
         /// <summary>
+        /// Checks whether the specified <paramref name="fileOrDirectory" /> is owned by the current user.
+        /// </summary>
+        /// <param name="fileOrDirectory">The full path of the file or directory.</param>
+        /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
+        /// <returns><c>true</c>, if the current file is owned by the current user; <c>false</c> otherwise.</returns>
+        public static bool IsOwned(string fileOrDirectory)
+        {
+            return StringComparer.Ordinal.Equals(GetOwningUserName(fileOrDirectory), Environment.UserName);
+        }
+
+        /// <summary>
+        /// Gets the name of the group user the specified <paramref name="fileOrDirectory" />.
+        /// </summary>
+        /// <param name="fileOrDirectory">The full path of the file or directory.</param>
+        /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
+        /// <returns>The name of the owning user.</returns>
+        public static string GetOwningUserName(string fileOrDirectory)
+        {
+            return GetAttributes(fileOrDirectory).OwningUser;
+        }
+
+        /// <summary>
+        /// Gets the name of the group owning the specified <paramref name="fileOrDirectory" />.
+        /// </summary>
+        /// <param name="fileOrDirectory">The full path of the file or directory.</param>
+        /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
+        /// <returns>The name of the owning group.</returns>
+        public static string GetOwningGroupName(string fileOrDirectory)
+        {
+            return GetAttributes(fileOrDirectory).OwningGroup;
+        }
+
+        /// <summary>
         /// Gets the <see cref="FileSystemAttributes" /> for the specified <paramref name="fileOrDirectory"/>.
         /// </summary>
         /// <param name="fileOrDirectory">The full path of the file or directory.</param>
