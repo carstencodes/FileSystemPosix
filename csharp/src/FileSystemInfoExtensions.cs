@@ -15,6 +15,39 @@ namespace Posix.FileSystem.Permission
     public static class FileSystemInfoExtensions
     {
         /// <summary>
+        /// Checks whether the file system entry represented by this instance is owned by the current user.
+        /// </summary>
+        /// <param name="info">The current instance.</param>
+        /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
+        /// <returns><c>true</c>, if the current file is owned by the current user; <c>false</c> otherwise.</returns>
+        public static bool IsOwned(this FileSystemInfo info)
+        {
+            return StringComparer.Ordinal.Equals(info.GetOwningUserName(), Environment.UserName);
+        }
+
+        /// <summary>
+        /// Gets the name of the user owning the file system entry represented by this instance. 
+        /// </summary>
+        /// <param name="info">The current instance.</param>
+        /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
+        /// <returns>The name of the owning user.</returns>
+        public static string GetOwningUserName(this FileSystemInfo info)
+        {
+            return info.GetAttributes().OwningUser;
+        }
+
+        /// <summary>
+        /// Gets the name of the group owning the file system entry represented by this instance.
+        /// </summary>
+        /// <param name="info">The current instance.</param>
+        /// <exception cref="ArgumentNullException">If this method is applied to an instance equivalent to <c>null</c>.</exception>
+        /// <returns>The name of the owning group.</returns>
+        public static string GetOwningGroupName(this FileSystemInfo info)
+        {
+            return info.GetAttributes().OwningGroup;
+        }
+
+        /// <summary>
         /// Gets the <see cref="FileSystemAttributes" /> for this instance.
         /// </summary>
         /// <param name="info">The current instance.</param>
