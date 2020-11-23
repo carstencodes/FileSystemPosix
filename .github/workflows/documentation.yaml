@@ -1,0 +1,37 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main, staging, development ]
+  pull_request:
+    branches: [ main, staging, development ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+# disabled due to a bug similar to https://github.com/dotnet/docfx/issues/5508
+#  generate_csharp_docs:
+#    runs-on: ubuntu-latest
+#    name: Generate the code documentation for C#
+#    steps:
+#    - uses: actions/checkout@v1
+#      name: Checkout code
+#    - uses: nunit/docfx-action@v1.0.0
+#      name: Build Documentation
+#      with:
+#        args: csharp/docfx.json
+  generate_rust_docs:
+    runs-on: ubuntu-latest
+    name: Generate the code documentation for Rust
+    steps:
+    - uses: actions/checkout@v1
+      name: Checkout code
+    - name: Run cargo using documentation
+      run: cargo doc --verbose --release
+      working-directory: rs
+    - name: Upload Rust documentation as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: rust-documentation
+        path: rs/target/doc/
