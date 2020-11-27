@@ -33,8 +33,8 @@ namespace Posix.FileSystem.Permission
             this.backends = new Dictionary<OSPlatform, Backend>()
             {
                 { OSPlatform.Windows, new SimpleWindowsBackend() },
-                { OSPlatform.Linux, new LinuxBackend() },
-                { OSPlatform.OSX, new OsXBackend() },
+                { OSPlatform.Linux, new UnixBackend() },
+                { OSPlatform.OSX, new UnixBackend() },
             };
         }
 
