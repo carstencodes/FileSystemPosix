@@ -8,6 +8,7 @@ use libc::{S_IRUSR, S_IWUSR, S_IXUSR, S_ISUID, S_IRGRP, S_IWGRP, S_IXGRP, S_ISGI
 use std::path::PathBuf;
 use std::os::unix::fs::PermissionsExt;
 use libc::{mode_t};
+use std::convert::TryFrom;
 
 pub struct PermissionSet
 {
@@ -76,17 +77,24 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::fs::FsErro
     match file_metadata
     {
         Ok(metadata) => {
-            let permission_set : mode_t = metadata.permissions().mode();
-            
-            let user_permissions = unwrap_permissions(permission_set, S_IRUSR, S_IWUSR, S_IXUSR, S_ISUID);
-            let group_permissions = unwrap_permissions(permission_set, S_IRGRP, S_IWGRP, S_IXGRP, S_ISGID);
-            let other_permissions = unwrap_permissions(permission_set, S_IROTH, S_IWOTH, S_IXOTH, S_ISVTX);
+            let permission_set_mode : u32 = metadata.permissions().mode();
 
-            return Ok(PermissionSet {
-                user_permissions,
-                group_permissions,
-                other_permissions
-            })
+            let permission_set_result = mode_t::try_from(permission_set_mode);
+
+            match permission_set_result {
+                Err(_) => { return Err(super::fs::FsError::UnknownError); },
+                Ok(permission_set) => {
+                    let user_permissions = unwrap_permissions(permission_set, S_IRUSR, S_IWUSR, S_IXUSR, S_ISUID);
+                    let group_permissions = unwrap_permissions(permission_set, S_IRGRP, S_IWGRP, S_IXGRP, S_ISGID);
+                    let other_permissions = unwrap_permissions(permission_set, S_IROTH, S_IWOTH, S_IXOTH, S_ISVTX);
+
+                    return Ok(PermissionSet {
+                        user_permissions,
+                        group_permissions,
+                        other_permissions
+                    });
+                }
+            } 
         },
         Err(_) => {
             return Err(super::fs::FsError::UnknownError);
