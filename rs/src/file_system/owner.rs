@@ -31,7 +31,7 @@ pub fn user(path: PathBuf) -> Result<String, super::fs::FsError>
                         None => { return Err(super::fs::FsError::UnknownError) }
                     }
                 },
-                None => return { Err(super::fs::FsError::UnknownError) }
+                None => { return Err(super::fs::FsError::UnknownError) }
             }
         },
         Err(_) => {
@@ -63,7 +63,7 @@ pub fn group(path: PathBuf) -> Result<String, super::fs::FsError>
                         None => { return Err(super::fs::FsError::UnknownError) }
                     }
                 },
-                None => return { Err(super::fs::FsError::UnknownError) }
+                None => { return Err(super::fs::FsError::UnknownError) }
             }
         },
         Err(_) => {
