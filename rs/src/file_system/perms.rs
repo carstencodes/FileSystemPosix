@@ -43,7 +43,7 @@ impl PermissionSet
     }
 }
 
-fn unwrap_permissions(mode: u32, read_perm: mode_t, write_perm: mode_t, exec_perm: mode_t, special: mode_t) -> super::nibble::Nibble
+fn unwrap_permissions(mode: mode_t, read_perm: mode_t, write_perm: mode_t, exec_perm: mode_t, special: mode_t) -> super::nibble::Nibble
 {
     let mut permission : super::nibble::Nibble = PERMISSION_NONE;
 
@@ -76,7 +76,7 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::fs::FsErro
     match file_metadata
     {
         Ok(metadata) => {
-            let permission_set = metadata.permissions().mode();
+            let permission_set : mode_t = metadata.permissions().mode();
             
             let user_permissions = unwrap_permissions(permission_set, S_IRUSR, S_IWUSR, S_IXUSR, S_ISUID);
             let group_permissions = unwrap_permissions(permission_set, S_IRGRP, S_IWGRP, S_IXGRP, S_ISGID);
