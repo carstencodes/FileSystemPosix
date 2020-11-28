@@ -1,6 +1,6 @@
 [package]
 name = "posix_permissions"
-version = "0.6.3"
+version = "0.6.5"
 authors = ["Carsten Igel"]
 edition = "2018"
 

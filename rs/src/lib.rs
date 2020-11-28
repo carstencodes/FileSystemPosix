@@ -11,7 +11,7 @@
 extern crate libc;
 
 use std::str::Utf8Error;
-use libc::c_char;
+use libc::{c_char, _SC_LOGIN_NAME_MAX};
 use std::ffi::CStr;
 use std::path::PathBuf;
 mod file_system;
@@ -37,7 +37,14 @@ fn fsqr_as_u16(value: FileSystemQueryResult) -> u16
 
 #[no_mangle]
 /// External
-pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *mut c_char, fs_user_name_len : *mut usize) -> u16
+pub extern "C" fn sys_get_maximum_login_name() -> i32
+{
+    return _SC_LOGIN_NAME_MAX.into();
+}
+
+#[no_mangle]
+/// External
+pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *mut c_char) -> u16
 {
     if fs_entry.is_null()
     {
@@ -45,11 +52,6 @@ pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *
     }
 
     if fs_user_name.is_null()
-    {
-        return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
-    }
-
-    if fs_user_name_len.is_null()
     {
         return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
     }
@@ -70,7 +72,6 @@ pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *
                     {
                         let name = CStr::from_bytes_with_nul_unchecked(name_ptr);
                         std::ptr::copy(name.as_ptr(), fs_user_name, user.len());
-                        * fs_user_name_len = user.len();
                     }
 
                     return fsqr_as_u16(FileSystemQueryResult::Ok); 
@@ -86,7 +87,7 @@ pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *
 
 #[no_mangle]
 /// External
-pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name : *mut c_char, fs_group_name_len : *mut usize) -> u16
+pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name : *mut c_char) -> u16
 {
     if fs_entry.is_null()
     {
@@ -94,11 +95,6 @@ pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name :
     }
 
     if fs_group_name.is_null()
-    {
-        return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
-    }
-
-    if fs_group_name_len.is_null()
     {
         return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
     }
@@ -119,7 +115,6 @@ pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name :
                     {
                         let name = CStr::from_bytes_with_nul_unchecked(name_ptr);
                         std::ptr::copy(name.as_ptr(), fs_group_name, group.len());
-                        * fs_group_name_len = group.len();
                     }
 
                     return fsqr_as_u16(FileSystemQueryResult::Ok); 

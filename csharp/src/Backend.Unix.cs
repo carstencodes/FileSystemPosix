@@ -6,6 +6,9 @@
 
 namespace Posix.FileSystem.Permission
 {
+    using System;
+    using System.Text;
+
     using Posix;
 
     /// <summary>
@@ -13,22 +16,47 @@ namespace Posix.FileSystem.Permission
     /// </summary>
     internal sealed class UnixBackend : Backend
     {
+        private int maximumBufferSize = -1;
+
         /// <inheritdoc />
         protected sealed override string GetOwningUser(string fileOrDirectory)
         {
-            return string.Empty;
+            int bufferSize = this.GetMaximumBufferSize();
+            StringBuilder builder = new StringBuilder(bufferSize);
+            ushort result = NativeMethods.fs_owning_user_name(fileOrDirectory, builder);
+            // TODO check result
+            return builder.ToString();
         }
 
         /// <inheritdoc />
         protected sealed override string GetOwningGroup(string fileOrDirectory)
         {
-            return string.Empty;
+            int bufferSize = this.GetMaximumBufferSize();
+            StringBuilder builder = new StringBuilder(bufferSize);
+            ushort result = NativeMethods.fs_owning_group_name(fileOrDirectory, builder);
+            // TODO check result
+            return builder.ToString();
         }
 
         /// <inheritdoc />
         protected sealed override FileSystemPermissions GetPermissions(string fileOrDirectory)
         {
+            ushort permissions = 0;
+            ushort result = NativeMethods.fs_permissions(fileOrDirectory, out permissions);
+            // TODO check result
+            // TODO convert permissions
             return new FileSystemPermissions(FileSystemPermission.None, FileSystemPermission.Unknown, FileSystemPermission.Unknown);
+        }
+
+        private int GetMaximumBufferSize()
+        {
+            if (this.maximumBufferSize < 0)
+            {
+                int bufferSize = NativeMethods.sys_get_maximum_login_name();
+                this.maximumBufferSize = bufferSize;
+            }
+
+            return this.maximumBufferSize + 1;
         }
     }
 }
