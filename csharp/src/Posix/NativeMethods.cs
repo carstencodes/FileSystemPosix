@@ -17,11 +17,18 @@ namespace Posix.FileSystem.Permission.Posix
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        [DllImport("posix_permissions", CharSet=CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int sys_get_maximum_login_name();
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="fileSystemEntry"></param>
         /// <param name="userName"></param>
         /// <returns></returns>
         [DllImport("posix_permissions", CharSet=CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern uint fs_owning_user_name([MarshalAs(UnmanagedType.LPWStr)] string fileSystemEntry, StringBuilder userName);
+        internal static extern ushort fs_owning_user_name([MarshalAs(UnmanagedType.LPWStr)] string fileSystemEntry, StringBuilder userName);
 
         /// <summary>
         /// 
@@ -30,7 +37,7 @@ namespace Posix.FileSystem.Permission.Posix
         /// <param name="groupName"></param>
         /// <returns></returns>
         [DllImport("posix_permissions", CharSet=CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern uint fs_owning_group_name([MarshalAs(UnmanagedType.LPWStr)] string fileSystemEntry, StringBuilder groupName);
+        internal static extern ushort fs_owning_group_name([MarshalAs(UnmanagedType.LPWStr)] string fileSystemEntry, StringBuilder groupName);
 
         /// <summary>
         /// 
@@ -39,6 +46,6 @@ namespace Posix.FileSystem.Permission.Posix
         /// <param name="permissionSet"></param>
         /// <returns></returns>
         [DllImport("posix_permissions", CharSet=CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern uint fs_permissions([MarshalAs(UnmanagedType.LPWStr)] string fileSystemEntry, out ushort permissionSet);
+        internal static extern ushort fs_permissions([MarshalAs(UnmanagedType.LPWStr)] string fileSystemEntry, out ushort permissionSet);
     }
 }

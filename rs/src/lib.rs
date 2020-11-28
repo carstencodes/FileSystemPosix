@@ -10,10 +10,9 @@
 
 extern crate libc;
 
-use std::str::Utf8Error;
-use libc::c_char;
-use std::ffi::CStr;
+use libc::{c_char, _SC_LOGIN_NAME_MAX};
 use std::path::PathBuf;
+
 mod file_system;
 
 enum FileSystemQueryResult 
@@ -37,7 +36,14 @@ fn fsqr_as_u16(value: FileSystemQueryResult) -> u16
 
 #[no_mangle]
 /// External
-pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *mut c_char, fs_user_name_len : *mut usize) -> u16
+pub extern "C" fn sys_get_maximum_login_name() -> i32
+{
+    return _SC_LOGIN_NAME_MAX.into();
+}
+
+#[no_mangle]
+/// External
+pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *mut c_char) -> u16
 {
     if fs_entry.is_null()
     {
@@ -49,44 +55,33 @@ pub extern "C" fn fs_owning_user_name(fs_entry: * const c_char, fs_user_name : *
         return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
     }
 
-    if fs_user_name_len.is_null()
-    {
-        return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
-    }
-
-    let file_path_ref : &CStr = unsafe { CStr::from_ptr(fs_entry) };
-    let file_path_res : Result<&str, Utf8Error> = file_path_ref.to_str();
-
+    let file_path_res = file_system::marshal::c_string_to_str(fs_entry);
+    
     match file_path_res
     {
-        Ok(file_path) => { 
-            let path : PathBuf = file_system::fs::str_to_path(file_path);
-            let user_result = file_system::owner::user(path);
+        Some(file_path) => { 
+            let path : PathBuf = PathBuf::from(file_path);
+            let user_result : Result<String, file_system::FsError> = file_system::owner::user(path);
             match user_result
             {
                 Ok(user) => { 
-                    let name_ptr = user.as_bytes();
-                    unsafe
+                    if file_system::marshal::str_to_c_string(user, fs_user_name)
                     {
-                        let name = CStr::from_bytes_with_nul_unchecked(name_ptr);
-                        std::ptr::copy(name.as_ptr(), fs_user_name, user.len());
-                        * fs_user_name_len = user.len();
+                        return fsqr_as_u16(FileSystemQueryResult::Ok);
                     }
 
-                    return fsqr_as_u16(FileSystemQueryResult::Ok); 
+                    return fsqr_as_u16(FileSystemQueryResult::StringConversionError);
                 },
-                Err(_) => { }
+                Err(_) => { return fsqr_as_u16(FileSystemQueryResult::NoResult); }
             }
         },
-        Err(_utf8_error) => { return fsqr_as_u16(FileSystemQueryResult::StringConversionError); }
+        None => { return fsqr_as_u16(FileSystemQueryResult::StringConversionError); }
     }
-
-    return fsqr_as_u16(FileSystemQueryResult::NoResult);
 }
 
 #[no_mangle]
 /// External
-pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name : *mut c_char, fs_group_name_len : *mut usize) -> u16
+pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name : *mut c_char) -> u16
 {
     if fs_entry.is_null()
     {
@@ -98,39 +93,28 @@ pub extern "C" fn fs_owning_group_name(fs_entry: * const c_char, fs_group_name :
         return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
     }
 
-    if fs_group_name_len.is_null()
-    {
-        return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
-    }
-
-    let file_path_ref : &CStr = unsafe { CStr::from_ptr(fs_entry) };
-    let file_path_res : Result<&str, Utf8Error> = file_path_ref.to_str();
+    let file_path_res = file_system::marshal::c_string_to_str(fs_entry);
 
     match file_path_res
     {
-        Ok(file_path) => { 
-            let path : PathBuf = file_system::fs::str_to_path(file_path);
-            let group_result = file_system::owner::group(path);
+        Some(file_path) => { 
+            let path : PathBuf = PathBuf::from(file_path);
+            let group_result : Result<String, file_system::FsError> = file_system::owner::group(path);
             match group_result
             {
                 Ok(group) => { 
-                    let name_ptr = group.as_bytes();
-                    unsafe
+                    if file_system::marshal::str_to_c_string(group, fs_group_name)
                     {
-                        let name = CStr::from_bytes_with_nul_unchecked(name_ptr);
-                        std::ptr::copy(name.as_ptr(), fs_group_name, group.len());
-                        * fs_group_name_len = group.len();
+                        return fsqr_as_u16(FileSystemQueryResult::Ok);
                     }
 
-                    return fsqr_as_u16(FileSystemQueryResult::Ok); 
+                    return fsqr_as_u16(FileSystemQueryResult::StringConversionError);
                 },
-                Err(_) => { }
+                Err(_) => { return fsqr_as_u16(FileSystemQueryResult::NoResult); }
             }
         },
-        Err(_utf8_error) => { return fsqr_as_u16(FileSystemQueryResult::StringConversionError); }
+        None => { return fsqr_as_u16(FileSystemQueryResult::StringConversionError); }
     }
-
-    return fsqr_as_u16(FileSystemQueryResult::NoResult);
 }
 
 #[no_mangle]
@@ -147,14 +131,13 @@ pub extern "C" fn fs_permissions(fs_entry: * const c_char, permission : *mut u16
         return fsqr_as_u16(FileSystemQueryResult::ParameterIsNull);
     }
 
-    let file_path_ref : &CStr = unsafe { CStr::from_ptr(fs_entry) };
-    let file_path_res : Result<&str, Utf8Error> = file_path_ref.to_str();
+    let file_path_res = file_system::marshal::c_string_to_str(fs_entry);
 
     match file_path_res
     {
-        Ok(file_path) => { 
-            let path : PathBuf = file_system::fs::str_to_path(file_path);
-            let permission_result : Result<file_system::perms::PermissionSet, file_system::fs::FsError> = file_system::perms::get_permissions(path);
+        Some(file_path) => { 
+            let path : PathBuf = PathBuf::from(file_path);
+            let permission_result : Result<file_system::perms::PermissionSet, file_system::FsError> = file_system::perms::get_permissions(path);
             match permission_result
             {
                 Ok(perm) => {
@@ -164,13 +147,11 @@ pub extern "C" fn fs_permissions(fs_entry: * const c_char, permission : *mut u16
 
                     return fsqr_as_u16(FileSystemQueryResult::Ok); 
                 },
-                Err(_err) => { }
+                Err(_err) => { return fsqr_as_u16(FileSystemQueryResult::NoResult); }
             }
         },
-        Err(_utf8_error) => { return fsqr_as_u16(FileSystemQueryResult::StringConversionError); }
+        None => { return fsqr_as_u16(FileSystemQueryResult::StringConversionError); }
     }
-
-    return fsqr_as_u16(FileSystemQueryResult::NoResult);
 }
 
 

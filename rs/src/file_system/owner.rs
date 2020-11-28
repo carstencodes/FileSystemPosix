@@ -8,7 +8,7 @@ use users::{get_user_by_uid, get_group_by_gid};
 use std::os::unix::fs::MetadataExt;
 use std::path::PathBuf;
 
-pub fn user(path: PathBuf) -> Result<String, super::fs::FsError>
+pub fn user(path: PathBuf) -> Result<String, super::FsError>
 {
     let file_metadata = path.symlink_metadata();
     match file_metadata
@@ -28,19 +28,19 @@ pub fn user(path: PathBuf) -> Result<String, super::fs::FsError>
                             let name_ref = std::string::String::from(name);
                             return Ok(name_ref) 
                         },
-                        None => { return Err(super::fs::FsError::UnknownError) }
+                        None => { return Err(super::FsError::UnknownError) }
                     }
                 },
-                None => { return Err(super::fs::FsError::UnknownError) }
+                None => { return Err(super::FsError::UnknownError) }
             }
         },
         Err(_) => {
-            return Err(super::fs::FsError::UnknownError);
+            return Err(super::FsError::UnknownError);
         }
     }
 }
 
-pub fn group(path: PathBuf) -> Result<String, super::fs::FsError>
+pub fn group(path: PathBuf) -> Result<String, super::FsError>
 {
     let file_metadata = path.symlink_metadata();
     match file_metadata
@@ -60,14 +60,14 @@ pub fn group(path: PathBuf) -> Result<String, super::fs::FsError>
                             let name_ref = std::string::String::from(name);
                             return Ok(name_ref) 
                         },
-                        None => { return Err(super::fs::FsError::UnknownError) }
+                        None => { return Err(super::FsError::UnknownError) }
                     }
                 },
-                None => { return Err(super::fs::FsError::UnknownError) }
+                None => { return Err(super::FsError::UnknownError) }
             }
         },
         Err(_) => {
-            return Err(super::fs::FsError::UnknownError);
+            return Err(super::FsError::UnknownError);
         }
     }
 }

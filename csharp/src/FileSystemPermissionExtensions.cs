@@ -22,13 +22,13 @@ namespace Posix.FileSystem.Permission
         }
 
         /// <summary>
-        /// Checks, whether the <paramref name="permission" /> allows permission transfer using the sticky bit.
+        /// Checks, whether the <paramref name="permission" /> allows permission transfer using the special bit.
         /// </summary>
         /// <param name="permission">The permission to check.</param>
         /// <returns><c>true</c>, if the permission sticky bit is set; <c>false</c> otherwise.</returns>
-        public static bool IsSticky(this FileSystemPermission permission)
+        public static bool IsSpecial(this FileSystemPermission permission)
         {
-            return permission.HasFlag(FileSystemPermission.Sticky);
+            return permission.HasFlag(FileSystemPermission.Special);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Posix.FileSystem.Permission
         public static bool IsValid(this FileSystemPermission permission)
         {
             return ((permission == FileSystemPermission.None)
-                    || (permission.CanRead() 
+                    || (permission.CanRead()
                     && permission.CanWrite()
                     && permission.CanExecute())) ^ permission.IsUnknown();
         }

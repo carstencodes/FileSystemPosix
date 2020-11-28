@@ -30,8 +30,8 @@ jobs:
     - name: Run cargo using documentation
       run: cargo doc --verbose --release
       working-directory: rs
-    - name: Upload Rust documentation as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: rust-documentation
-        path: rs/target/doc/
+#    - name: Upload Rust documentation as artifact
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: rust-documentation
+#        path: rs/target/doc/
