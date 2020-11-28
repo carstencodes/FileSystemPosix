@@ -35,9 +35,9 @@ namespace Posix.FileSystem.Permission
         Read = 4,
 
         /// <summary>
-        /// Represents a value that is associated only with the sticky bit (s).
+        /// Represents a value that is associated only with the setuid, setgid or sticky bit (s,t).
         /// </summary>
-        Sticky = 8,
+        Special = 8,
 
         /// <summary>
         /// Represents a value that implies that there is no information available.
