@@ -5,10 +5,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>Posix.FileSystem.Permission</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InteropData Namespace="$(RootNamespace).Posix" EnumName="FsError" Include="$(MsBuildThisFileDirectory)..\..\definitions.d\Enums\FsError\*.*" />
   </ItemGroup>
 
   <Import Project="NativeLibContent.targets" />

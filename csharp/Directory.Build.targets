@@ -23,4 +23,6 @@
             <Output TaskParameter="OutputFile" ItemName="Compile" /> 
         </WriteCodeFragment>    
     </Target>
+
+    <Import Project="$(MsBuildThisFileDirectory)/InteropResultGeneration.targets" />
 </Project>
