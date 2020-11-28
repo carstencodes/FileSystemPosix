@@ -71,7 +71,7 @@ fn unwrap_permissions(mode: mode_t, read_perm: mode_t, write_perm: mode_t, exec_
     return permission;
 }
 
-pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::fs::FsError>
+pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::FsError>
 {
     let file_metadata = path.symlink_metadata();
     match file_metadata
@@ -82,7 +82,7 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::fs::FsErro
             let permission_set_result = mode_t::try_from(permission_set_mode);
 
             match permission_set_result {
-                Err(_) => { return Err(super::fs::FsError::UnknownError); },
+                Err(_) => { return Err(super::FsError::UnknownError); },
                 Ok(permission_set) => {
                     let user_permissions = unwrap_permissions(permission_set, S_IRUSR, S_IWUSR, S_IXUSR, S_ISUID);
                     let group_permissions = unwrap_permissions(permission_set, S_IRGRP, S_IWGRP, S_IXGRP, S_ISGID);
@@ -97,7 +97,7 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::fs::FsErro
             } 
         },
         Err(_) => {
-            return Err(super::fs::FsError::UnknownError);
+            return Err(super::FsError::UnknownError);
         }
     }
 }
