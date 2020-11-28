@@ -6,7 +6,7 @@ use std::fs::read_dir;
 
 fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
-    let dest_path = Path::new(&out_dir).join("enum.rs");
+    let dest_path = Path::new(&out_dir).join("enum.g.rs");
     let mut lines : Vec<String> = Vec::new();
 
     let path = Path::new("../definitions.d/Enums");

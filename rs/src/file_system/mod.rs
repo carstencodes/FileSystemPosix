@@ -9,4 +9,4 @@ pub mod nibble;
 pub mod owner;
 pub mod perms;
 
-include!(concat!(env!("OUT_DIR"), "/enum.rs"));
+include!(concat!(env!("OUT_DIR"), "/enum.g.rs"));
