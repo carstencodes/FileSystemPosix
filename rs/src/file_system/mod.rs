@@ -9,7 +9,4 @@ pub mod nibble;
 pub mod owner;
 pub mod perms;
 
-pub enum FsError
-{
-    UnknownError
-}
+include!(concat!(env!("OUT_DIR"), "/enum.rs"));
