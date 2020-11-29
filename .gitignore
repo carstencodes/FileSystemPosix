@@ -10,4 +10,5 @@
 **/*.rs.bk
 **/obj/
 **/bin/
-**/pack/
+**/pack/node_modules/
+node_modules
