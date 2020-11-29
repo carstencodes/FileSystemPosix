@@ -1,6 +1,6 @@
 # Architectural Decision Log
 
-This log lists the architectural decisions for [project name].
+This log lists the architectural decisions for Posix.FileSystem.Permission.
 
 <!-- adrlog -- Regenerate the content by using "adr-log -i". You can install it via "npm install -g adr-log" -->
 
@@ -8,6 +8,6 @@ This log lists the architectural decisions for [project name].
 
 <!-- adrlogstop -->
 
-For new ADRs, please use [template.md](template.md) as basis.
+For new ADRs, please use [template.md](../template.md) as basis.
 More information on MADR is available at <https://adr.github.io/madr/>.
 General information about architectural decision records is available at <https://adr.github.io/>.
