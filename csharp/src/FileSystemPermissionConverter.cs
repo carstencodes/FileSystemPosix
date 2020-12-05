@@ -27,8 +27,8 @@ namespace Posix.FileSystem.Permission
 
             FileSystemPermission permission = FileSystemPermission.None;
 
-            UpdateValueConditional(((value & ReadPermissions)    == ReadPermissions), ref permission, FileSystemPermission.Read);
-            UpdateValueConditional(((value & WritePermissions)   == WritePermissions), ref permission, FileSystemPermission.Write);
+            UpdateValueConditional(((value & ReadPermissions) == ReadPermissions), ref permission, FileSystemPermission.Read);
+            UpdateValueConditional(((value & WritePermissions) == WritePermissions), ref permission, FileSystemPermission.Write);
             UpdateValueConditional(((value & ExecutePermissions) == ExecutePermissions), ref permission, FileSystemPermission.Execute);
             UpdateValueConditional(((value & SpecialPermissions) == SpecialPermissions), ref permission, FileSystemPermission.Special);
 

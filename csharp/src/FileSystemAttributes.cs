@@ -20,9 +20,9 @@ namespace Posix.FileSystem.Permission
         /// <param name="group">The name of the owning group.</param>
         /// <param name="permissions">The permissions.</param>
         public FileSystemAttributes(
-            string user, 
-            string group, 
-            FileSystemPermissions permissions) 
+            string user,
+            string group,
+            FileSystemPermissions permissions)
         {
             this.Permissions = permissions;
             this.OwningUser = user ?? throw new ArgumentNullException(nameof(user));
