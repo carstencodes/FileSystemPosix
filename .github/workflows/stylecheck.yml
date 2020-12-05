@@ -25,6 +25,7 @@ jobs:
   cargo-fmt:
     runs-on: ubuntu-16.04
     steps:
+      - uses: actions/checkout@v2
       - name: Install rustfmt
         run: rustup component add rustfmt
       - name: Run build
