@@ -62,7 +62,7 @@ namespace Posix.FileSystem.Permission
             {
                 AdaptableBackend newBackend = new AdaptableBackend(getOwningUser, getOwningGroup, getPermissions);
                 Current.backends[platform] = newBackend;
-                return true;            
+                return true;
             }
             catch (System.Exception)
             {

@@ -28,7 +28,7 @@ namespace Posix.FileSystem.Permission
         /// <inheritdoc />
         protected sealed override FileSystemPermissions GetPermissions(string fileOrDirectory)
         {
-            try 
+            try
             {
                 FileAttributes attributes = File.GetAttributes(fileOrDirectory);
 

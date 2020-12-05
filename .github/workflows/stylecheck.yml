@@ -1,0 +1,37 @@
+name: Style Check
+
+on:
+  push:
+    branches: [ main, staging, development ]
+  pull_request:
+    branches: [ main, staging, development ]
+
+jobs:
+  dotnet-core:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.404
+    - name: Install dependencies
+      run: dotnet restore
+    - name: install dotnet format
+      run: dotnet tool install -g dotnet-format
+    - name: Run format check
+      run: dotnet format --check -f .
+      working-directory: csharp
+  cargo-fmt:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install rustfmt
+        run: rustup component add rustfmt
+      - name: Run build
+        run: cargo build
+        working-directory: rs
+      - name: Run cargo cargo
+        run: cargo fmt -- --check
+        working-directory: rs
+

@@ -1,14 +1,13 @@
 /*
  * nibble.rs - (C) 2020 by Carsten Igel
- * 
+ *
  * Published using the MIT License
  */
 
 use std::ops::BitOr;
 
 #[repr(u8)]
-pub enum Nibble
-{
+pub enum Nibble {
     B0000 = 0b0000,
     B0001 = 0b0001,
     B0010 = 0b0010,
@@ -27,41 +26,35 @@ pub enum Nibble
     B1111 = 0b1111,
 }
 
-impl BitOr for Nibble
-{
+impl BitOr for Nibble {
     type Output = Self;
 
     // rhs is the "right-hand side" of the expression `a | b`
     fn bitor(self, rhs: Self) -> Self::Output {
         let lhs_ref = &self;
         let rhs_ref = &rhs;
-        let lhsu8 : u8 = lhs_ref.into();
-        let rhsu8 : u8 = rhs_ref.into();
-        let mut result : u8 = lhsu8 | rhsu8;
+        let lhsu8: u8 = lhs_ref.into();
+        let rhsu8: u8 = rhs_ref.into();
+        let mut result: u8 = lhsu8 | rhsu8;
         result = result & 0x0F;
-        let element : Nibble = result.into();
+        let element: Nibble = result.into();
         return element;
     }
 }
 
-impl std::default::Default for Nibble
-{
-    fn default() -> Self
-    {
+impl std::default::Default for Nibble {
+    fn default() -> Self {
         return Nibble::B0000;
     }
 }
 
-impl std::convert::From<u8> for Nibble
-{
+impl std::convert::From<u8> for Nibble {
     fn from(value: u8) -> Nibble {
-        if value > 0x0Fu8
-        {
+        if value > 0x0Fu8 {
             return Self::from(value & 0x0Fu8);
         }
 
-        let result = match value
-        {
+        let result = match value {
             0b0000 => Some(Nibble::B0000),
             0b0001 => Some(Nibble::B0001),
             0b0010 => Some(Nibble::B0010),
@@ -85,11 +78,9 @@ impl std::convert::From<u8> for Nibble
     }
 }
 
-impl std::convert::From<&Nibble> for u8
-{
+impl std::convert::From<&Nibble> for u8 {
     fn from(nibble: &Nibble) -> u8 {
-        match nibble
-        {
+        match nibble {
             Nibble::B0000 => 0b0000,
             Nibble::B0001 => 0b0001,
             Nibble::B0010 => 0b0010,
@@ -110,11 +101,9 @@ impl std::convert::From<&Nibble> for u8
     }
 }
 
-impl Nibble
-{
-    pub fn to_u4(self: &Nibble) -> u8
-    {
-        let value : u8 = self.into();
+impl Nibble {
+    pub fn to_u4(self: &Nibble) -> u8 {
+        let value: u8 = self.into();
         return value & 0x0F;
     }
 }

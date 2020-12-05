@@ -6,10 +6,9 @@
 
 namespace Posix.FileSystem.Permission
 {
+    using Posix;
     using System;
     using System.Text;
-
-    using Posix;
 
     /// <summary>
     /// Basic implementation of a linux specific backend for the file system backend using native interop.
@@ -44,7 +43,7 @@ namespace Posix.FileSystem.Permission
             ushort permissions = 0;
             ushort result = NativeMethods.fs_permissions(fileOrDirectory, out permissions);
             CheckResult(result);
-            if (TryConvert(permissions, 
+            if (TryConvert(permissions,
                 out FileSystemPermission userPermissions,
                 out FileSystemPermission groupPermissions,
                 out FileSystemPermission otherPermissions))
@@ -71,14 +70,14 @@ namespace Posix.FileSystem.Permission
 
             if (0 != nibble1)
             {
-                userPermission  = FileSystemPermission.Unknown;
+                userPermission = FileSystemPermission.Unknown;
                 groupPermission = FileSystemPermission.Unknown;
                 otherPermission = FileSystemPermission.Unknown;
 
                 return false; // TODO error encoding
             }
 
-            userPermission  = FileSystemPermissionConverter.Parse(nibble2);
+            userPermission = FileSystemPermissionConverter.Parse(nibble2);
             groupPermission = FileSystemPermissionConverter.Parse(nibble3);
             otherPermission = FileSystemPermissionConverter.Parse(nibble4);
 

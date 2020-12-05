@@ -39,14 +39,14 @@ namespace Posix.FileSystem.Permission
         /// <param name="fileOrDirectory">The file system entry.</param>
         /// <returns>The user name of the owning user.</returns>
         protected abstract string GetOwningUser(string fileOrDirectory);
-        
+
         /// <summary>
         /// Gets the group that the specified <paramref name="fileOrDirectory" /> entry belongs to.
         /// </summary>
         /// <param name="fileOrDirectory">The file system entry.</param>
         /// <returns>The group name of the owning group.</returns>
         protected abstract string GetOwningGroup(string fileOrDirectory);
-        
+
         /// <summary>
         /// Gets the permissions of the specified <paramref name="fileOrDirectory" />.
         /// </summary>
