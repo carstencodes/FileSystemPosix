@@ -39,7 +39,7 @@ namespace Posix.FileSystem.Permission.Posix
 
         private const ushort IoErrorTimedOut = 7;
 
-        private const ushort IoErrorUndefinedOrOther = 8;
+        private const ushort IoErrorUndefinedOrOther = 64;
 
         private const string UnknownErrorCode = "Error code {0:X} is not known";
 
