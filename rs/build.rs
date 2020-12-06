@@ -19,11 +19,13 @@ fn main() {
             }
 
             let name = entry_path.file_name().unwrap().to_str().unwrap();
-            let line = format!("pub enum {}", name);
+            let enum_name: std::string::String = name.to_string();
+            let line = format!("pub enum {}", enum_name);
             lines.push(line.to_string());
             lines.push("{".to_string());
 
             let enum_files = read_dir(entry_path).unwrap();
+            let mut map = std::collections::HashMap::new();
             for enum_value in enum_files {
                 let enum_file_path = enum_value.unwrap().path();
                 if enum_file_path.is_dir() {
@@ -38,9 +40,31 @@ fn main() {
                     fs::read_to_string(enum_file_path.to_str().unwrap())
                         .unwrap();
 
-                lines.push(format!("    {} = {}, // {}", name, value, comment));
+                map.insert(value.to_string(), name.to_string());
+                lines.push(format!(
+                    "    {} = {}, // {}",
+                    name.to_string(),
+                    value,
+                    comment
+                ));
             }
 
+            lines.push("}".to_string());
+
+            lines.push("".to_string());
+            lines
+                .push("impl std::convert::From<FsError> for u16 {".to_string());
+            lines.push("  fn from(value: FsError) -> u16 {".to_string());
+            lines.push("    return match value {".to_string());
+            for (value, name) in map {
+                lines.push(format!(
+                    "      {}::{} => {},",
+                    enum_name, name, value
+                ));
+            }
+
+            lines.push("    };".to_string());
+            lines.push("  }".to_string());
             lines.push("}".to_string());
         }
     } else {

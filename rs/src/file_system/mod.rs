@@ -4,8 +4,8 @@
  * Published using the MIT License
  */
 
+pub mod errors;
 pub mod marshal;
 pub mod nibble;
 pub mod owner;
 pub mod perms;
-pub mod errors;

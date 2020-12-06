@@ -72,7 +72,9 @@ fn unwrap_permissions(
     return permission;
 }
 
-pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::errors::FsError> {
+pub fn get_permissions(
+    path: PathBuf,
+) -> Result<PermissionSet, super::errors::PosixFsError> {
     let file_metadata = path.symlink_metadata();
     match file_metadata {
         Ok(metadata) => {
@@ -81,8 +83,12 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::errors::Fs
             let permission_set_result = mode_t::try_from(permission_set_mode);
 
             match permission_set_result {
-                Err(_) => {
-                    return Err(super::errors::FsError::UnknownError);
+                Err(_try_from_int_error) => {
+                    return Err(
+                        super::errors::PosixFsError::NumericConversion(
+                            permission_set_mode,
+                        ),
+                    );
                 }
                 Ok(permission_set) => {
                     let user_permissions = unwrap_permissions(
@@ -115,8 +121,10 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::errors::Fs
                 }
             }
         }
-        Err(_) => {
-            return Err(super::errors::FsError::UnknownError);
+        Err(io_error) => {
+            let error = io_error.kind();
+            let resulting_error = super::errors::PosixFsError::IoErr(error);
+            return Err(resulting_error);
         }
     }
 }

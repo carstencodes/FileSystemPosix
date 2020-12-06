@@ -17,17 +17,15 @@ mod file_system;
 
 enum FileSystemQueryResult {
     Ok = 0,
-    NoResult = 1,
-    ParameterIsNull = 17,
-    StringConversionError = 18,
+    ParameterIsNull = 1,
+    StringConversionError = 2,
 }
 
 fn fsqr_as_u16(value: FileSystemQueryResult) -> u16 {
     match value {
         FileSystemQueryResult::Ok => 0u16,
-        FileSystemQueryResult::NoResult => 1u16,
-        FileSystemQueryResult::ParameterIsNull => 17u16,
-        FileSystemQueryResult::StringConversionError => 18u16,
+        FileSystemQueryResult::ParameterIsNull => 1u16,
+        FileSystemQueryResult::StringConversionError => 2u16,
     }
 }
 
@@ -56,7 +54,7 @@ pub extern "C" fn fs_owning_user_name(
     match file_path_res {
         Some(file_path) => {
             let path: PathBuf = PathBuf::from(file_path);
-            let user_result: Result<String, file_system::errors::FsError> =
+            let user_result: Result<String, file_system::errors::PosixFsError> =
                 file_system::owner::user(path);
             match user_result {
                 Ok(user) => {
@@ -69,8 +67,8 @@ pub extern "C" fn fs_owning_user_name(
                         FileSystemQueryResult::StringConversionError,
                     );
                 }
-                Err(_) => {
-                    return fsqr_as_u16(FileSystemQueryResult::NoResult);
+                Err(fs_error) => {
+                    return fs_error.into();
                 }
             }
         }
@@ -99,8 +97,10 @@ pub extern "C" fn fs_owning_group_name(
     match file_path_res {
         Some(file_path) => {
             let path: PathBuf = PathBuf::from(file_path);
-            let group_result: Result<String, file_system::errors::FsError> =
-                file_system::owner::group(path);
+            let group_result: Result<
+                String,
+                file_system::errors::PosixFsError,
+            > = file_system::owner::group(path);
             match group_result {
                 Ok(group) => {
                     if file_system::marshal::str_to_c_string(
@@ -114,8 +114,8 @@ pub extern "C" fn fs_owning_group_name(
                         FileSystemQueryResult::StringConversionError,
                     );
                 }
-                Err(_) => {
-                    return fsqr_as_u16(FileSystemQueryResult::NoResult);
+                Err(fs_error) => {
+                    return fs_error.into();
                 }
             }
         }
@@ -146,7 +146,7 @@ pub extern "C" fn fs_permissions(
             let path: PathBuf = PathBuf::from(file_path);
             let permission_result: Result<
                 file_system::perms::PermissionSet,
-                file_system::errors::FsError,
+                file_system::errors::PosixFsError,
             > = file_system::perms::get_permissions(path);
             match permission_result {
                 Ok(perm) => {
@@ -156,8 +156,8 @@ pub extern "C" fn fs_permissions(
 
                     return fsqr_as_u16(FileSystemQueryResult::Ok);
                 }
-                Err(_err) => {
-                    return fsqr_as_u16(FileSystemQueryResult::NoResult);
+                Err(fs_error) => {
+                    return fs_error.into();
                 }
             }
         }
