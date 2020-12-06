@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>Posix.FileSystem.Permission</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InteropData Namespace="$(RootNamespace).Posix" EnumName="FsError" Include="$(MsBuildThisFileDirectory)..\..\definitions.d\Enums\FsError\*.*" />
+  </ItemGroup>
+
+  <Import Project="NativeLibContent.targets" />
+
+</Project>

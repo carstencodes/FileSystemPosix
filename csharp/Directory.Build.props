@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <BaseIntermediateOutputPath>$(MsBuildThisFileDirectory)\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <BaseOutputPath>$(MsBuildThisFileDirectory)\bin\</BaseOutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+    <PropertyGroup>
+        <Description>A dead-simple library to access and modifiy file permissions on POSIX systems.</Description>
+        <Copyright>Copyright Carsten Igel. All rights reserved.</Copyright>
+    </PropertyGroup>
+    <PropertyGroup>
+        <Company>Carsten Igel</Company>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <FileVersion>$(Version)</FileVersion>
+        <Product>$(MSBuildProjectName)</Product>
+        <AssemblyTitle>$(MSBuildProjectName)</AssemblyTitle>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PackageVersion>$(FileVersion)</PackageVersion>
+        <PackageId>$(MSBuildProjectName)</PackageId>
+        <Title>POSIX File Permissions</Title>
+        <Authors>Carsten Igel</Authors>
+        <PackageDescription></PackageDescription>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <DevelopmentDependency>false</DevelopmentDependency>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon></PackageIcon>
+        <PackageReleaseNotes></PackageReleaseNotes>
+        <PackageTags>POSIX;Linux;MACOSX;file-permissions</PackageTags>
+        <PackageOutputPath>$(MsBuildThisFileDirectory)\pack\$(Configuration)\</PackageOutputPath>
+        <IncludeSource>false</IncludeSource>
+        <IsTool>false</IsTool>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    <ItemGroup>
+        <SourceRoot Include="$(MSBuildThisFileDirectory)\..\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    </ItemGroup>
+</Project>
