@@ -55,9 +55,11 @@ namespace Posix.FileSystem.Permission
 
         private static void CheckResult(ushort nativeMethodResult)
         {
-            if (0 != nativeMethodResult)
+            // TODO numeric_user_id, numeric_group_id as result, if string repr. not found
+            if (nativeMethodResult.IsError())
             {
-                throw new NotImplementedException(); // TODO implement
+                string errorMessage = NativeErrorCodes.GetErrorMessage(nativeMethodResult);
+                throw new NotImplementedException(errorMessage); // TODO implement
             }
         }
 
