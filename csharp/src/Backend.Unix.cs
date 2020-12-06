@@ -55,7 +55,7 @@ namespace Posix.FileSystem.Permission
 
         private static void CheckResult(ushort nativeMethodResult)
         {
-            if (0 != nativeMethodResult)
+            if (nativeMethodResult.IsError())
             {
                 throw new NotImplementedException(); // TODO implement
             }
