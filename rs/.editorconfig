@@ -1,5 +1,0 @@
-root = false
-
-[*.rs]
-
-file_header_template = \nCopyright 2020 by Carsten Igel\n\nPublished using the MIT License.\n\nFor more information refer to LICENSE file in project root.
