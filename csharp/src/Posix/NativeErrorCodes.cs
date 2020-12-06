@@ -97,7 +97,7 @@ namespace Posix.FileSystem.Permission.Posix
             else if ((errorCode & FsErrorOffSet) == FsErrorOffSet)
             {
                 ushort localErrorCode = (ushort)(errorCode - FsErrorOffSet);
-                if (FsErrorValues.Values.TryGetValue(localErrorCode, out FsError error) 
+                if (FsErrorValues.Values.TryGetValue(localErrorCode, out FsError error)
                     && FsErrorValues.Texts.TryGetValue(error, out string errorMessage))
                 {
                     return errorMessage;
