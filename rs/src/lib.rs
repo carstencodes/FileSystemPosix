@@ -56,7 +56,7 @@ pub extern "C" fn fs_owning_user_name(
     match file_path_res {
         Some(file_path) => {
             let path: PathBuf = PathBuf::from(file_path);
-            let user_result: Result<String, file_system::FsError> =
+            let user_result: Result<String, file_system::errors::FsError> =
                 file_system::owner::user(path);
             match user_result {
                 Ok(user) => {
@@ -99,7 +99,7 @@ pub extern "C" fn fs_owning_group_name(
     match file_path_res {
         Some(file_path) => {
             let path: PathBuf = PathBuf::from(file_path);
-            let group_result: Result<String, file_system::FsError> =
+            let group_result: Result<String, file_system::errors::FsError> =
                 file_system::owner::group(path);
             match group_result {
                 Ok(group) => {
@@ -146,7 +146,7 @@ pub extern "C" fn fs_permissions(
             let path: PathBuf = PathBuf::from(file_path);
             let permission_result: Result<
                 file_system::perms::PermissionSet,
-                file_system::FsError,
+                file_system::errors::FsError,
             > = file_system::perms::get_permissions(path);
             match permission_result {
                 Ok(perm) => {

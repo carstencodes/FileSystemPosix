@@ -72,7 +72,7 @@ fn unwrap_permissions(
     return permission;
 }
 
-pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::FsError> {
+pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::errors::FsError> {
     let file_metadata = path.symlink_metadata();
     match file_metadata {
         Ok(metadata) => {
@@ -82,7 +82,7 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::FsError> {
 
             match permission_set_result {
                 Err(_) => {
-                    return Err(super::FsError::UnknownError);
+                    return Err(super::errors::FsError::UnknownError);
                 }
                 Ok(permission_set) => {
                     let user_permissions = unwrap_permissions(
@@ -116,7 +116,7 @@ pub fn get_permissions(path: PathBuf) -> Result<PermissionSet, super::FsError> {
             }
         }
         Err(_) => {
-            return Err(super::FsError::UnknownError);
+            return Err(super::errors::FsError::UnknownError);
         }
     }
 }

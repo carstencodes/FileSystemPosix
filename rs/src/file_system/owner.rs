@@ -8,7 +8,7 @@ use std::os::unix::fs::MetadataExt;
 use std::path::PathBuf;
 use users::{get_group_by_gid, get_user_by_uid};
 
-pub fn user(path: PathBuf) -> Result<String, super::FsError> {
+pub fn user(path: PathBuf) -> Result<String, super::errors::FsError> {
     let file_metadata = path.symlink_metadata();
     match file_metadata {
         Ok(metadata) => {
@@ -24,19 +24,19 @@ pub fn user(path: PathBuf) -> Result<String, super::FsError> {
                             let name_ref = std::string::String::from(name);
                             return Ok(name_ref);
                         }
-                        None => return Err(super::FsError::UnknownError),
+                        None => return Err(super::errors::FsError::UnknownError),
                     }
                 }
-                None => return Err(super::FsError::UnknownError),
+                None => return Err(super::errors::FsError::UnknownError),
             }
         }
         Err(_) => {
-            return Err(super::FsError::UnknownError);
+            return Err(super::errors::FsError::UnknownError);
         }
     }
 }
 
-pub fn group(path: PathBuf) -> Result<String, super::FsError> {
+pub fn group(path: PathBuf) -> Result<String, super::errors::FsError> {
     let file_metadata = path.symlink_metadata();
     match file_metadata {
         Ok(metadata) => {
@@ -52,14 +52,14 @@ pub fn group(path: PathBuf) -> Result<String, super::FsError> {
                             let name_ref = std::string::String::from(name);
                             return Ok(name_ref);
                         }
-                        None => return Err(super::FsError::UnknownError),
+                        None => return Err(super::errors::FsError::UnknownError),
                     }
                 }
-                None => return Err(super::FsError::UnknownError),
+                None => return Err(super::errors::FsError::UnknownError),
             }
         }
         Err(_) => {
-            return Err(super::FsError::UnknownError);
+            return Err(super::errors::FsError::UnknownError);
         }
     }
 }
